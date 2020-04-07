@@ -5,7 +5,7 @@ import org.scalatest.wordspec.AnyWordSpec
 
 class CheckoutServiceTest extends AnyWordSpec with Matchers {
 
-  "checkout" should {
+  "calculateCost" should {
 
     "calculate total cost when no items" in new CheckoutService {
       //given
@@ -31,13 +31,13 @@ class CheckoutServiceTest extends AnyWordSpec with Matchers {
 
     "calculate total cost when multiple items of same type" in new CheckoutService {
       //given
-      val items = List("Apple", "Apple", "Orange")
+      val items = List("Orange", "Orange", "Apple")
 
       //when
       val cost = calculateCost(items)
 
       //then
-      cost shouldEqual "£1.45"
+      cost shouldEqual "£1.1"
     }
 
     "throw error when item type is unknown" in new CheckoutService {
@@ -46,6 +46,17 @@ class CheckoutServiceTest extends AnyWordSpec with Matchers {
       }
 
       error.getMessage shouldBe "Item not recognized: unknown"
+    }
+
+    "calculate total cost with promo discount" in new CheckoutService {
+      //given
+      val items = List("Apple", "Apple", "Orange")
+
+      //when
+      val cost = calculateCost(items)
+
+      //then
+      cost shouldEqual "£0.85"
     }
   }
 }
